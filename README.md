@@ -1,6 +1,6 @@
-# purr 💜
+# nuzzle 💜
 
-.NET ADO.NET driver for SQL Server. Npgsql with a SQL Server accent.
+.NET ADO.NET driver for SQL Server. Rubs up against ADO.NET just right.
 
 Part of [CopyCat](https://github.com/copycatdb) 🐱
 
@@ -24,9 +24,9 @@ while (await reader.ReadAsync())
 
 ## The irony
 
-Microsoft.Data.SqlClient is *Microsofts own driver* for *Microsofts own database* on *Microsofts own framework*. And were replacing it. With a cat. Written in Rust.
+Microsoft.Data.SqlClient is Microsofts own driver for Microsofts own database on Microsofts own framework. And were here offering an alternative. With a cat. Written in Rust.
 
-The audacity is not lost on us.
+We mean this with the utmost respect — SqlClient is an incredible driver that has served millions of developers for decades. nuzzle is just what happens when you start fresh with no backward-compatibility constraints.
 
 ## Status
 
@@ -34,7 +34,7 @@ The audacity is not lost on us.
 
 ## Attribution
 
-Inspired by [Npgsql](https://github.com/npgsql/npgsql), the .NET PostgreSQL driver that proves ADO.NET can actually be pleasant. And by [Microsoft.Data.SqlClient](https://github.com/dotnet/SqlClient) — we salute your decades of service. Enjoy retirement.
+Inspired by [Npgsql](https://github.com/npgsql/npgsql), the .NET PostgreSQL driver that proves ADO.NET can be pleasant. And by [Microsoft.Data.SqlClient](https://github.com/dotnet/SqlClient) — a monument of engineering and dedication to every customer.
 
 ## License
 
