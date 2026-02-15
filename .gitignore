@@ -1,0 +1,20 @@
+# Build
+target/
+bin/
+obj/
+
+# IDE
+.vs/
+.vscode/
+*.user
+*.suo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Rust
+native/target/
+
+# .NET
+*.nupkg

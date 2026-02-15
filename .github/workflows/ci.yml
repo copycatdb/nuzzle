@@ -1,0 +1,72 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  CARGO_TERM_COLOR: always
+  DOTNET_NOLOGO: true
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      sqlserver:
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        env:
+          ACCEPT_EULA: Y
+          MSSQL_SA_PASSWORD: Nuzzle_Test_P@ss1
+        ports:
+          - 1433:1433
+        options: >-
+          --health-cmd "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'Nuzzle_Test_P@ss1' -C -Q 'SELECT 1'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Rust fmt check
+        working-directory: native
+        run: cargo fmt --check
+
+      - name: Rust clippy
+        working-directory: native
+        run: cargo clippy -- -D warnings
+
+      - name: Build native library
+        working-directory: native
+        run: cargo build --release
+
+      - name: Copy native library
+        run: |
+          mkdir -p src/runtimes/linux-x64/native
+          cp native/target/release/libnuzzle_native.so src/runtimes/linux-x64/native/
+          # Also copy next to test binary location
+          cp native/target/release/libnuzzle_native.so test/
+
+      - name: Build .NET project
+        working-directory: src
+        run: dotnet build -c Release
+
+      - name: Run tests
+        working-directory: test
+        env:
+          NUZZLE_CONNECTION_STRING: "Server=localhost,1433;User Id=sa;Password=Nuzzle_Test_P@ss1;Database=master;TrustServerCertificate=yes"
+          LD_LIBRARY_PATH: ${{ github.workspace }}/native/target/release
+        run: dotnet test -c Release --logger "console;verbosity=detailed"
