@@ -1,0 +1,17 @@
+[package]
+name = "nuzzle-native"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+tabby = { git = "https://github.com/copycatdb/tabby.git", branch = "main", default-features = false, features = ["rustls"] }
+tokio = { version = "1", features = ["rt-multi-thread", "net", "macros", "sync"] }
+tokio-util = { version = "0.7", features = ["compat"] }
+uuid = "1"
+
+[profile.release]
+lto = true
+strip = true
